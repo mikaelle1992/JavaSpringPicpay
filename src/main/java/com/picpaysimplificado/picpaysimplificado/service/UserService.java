@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.picpaysimplificado.picpaysimplificado.domain.user.User;
 import com.picpaysimplificado.picpaysimplificado.domain.user.Usertype;
-import com.picpaysimplificado.picpaysimplificado.infra.exception.InsufficientBalanceException;
-import com.picpaysimplificado.picpaysimplificado.infra.exception.UnauthorizedTransactionException;
+import com.picpaysimplificado.picpaysimplificado.infra.exception.*;
 import com.picpaysimplificado.picpaysimplificado.repositories.UserRepository;
 
 @Service 
@@ -26,4 +25,13 @@ public class UserService {
             throw new InsufficientBalanceException("Usuário não tem saldo suficiente");
         }
     }
+
+    public User findUserById(Long id){
+        return repository.findUserById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado, id: " + id));
+   }
+
+   public void saveUser(User user){
+        this.repository.save(user);
+   }
+
 }
