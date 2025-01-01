@@ -36,5 +36,12 @@ public class ApiExceptionHandler {
             .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
     }
 
+    
+    @ExceptionHandler(NotificationException.class)
+    public ResponseEntity<ErrorMessage> handleNotificationException(NotificationException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
+            .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
 
 }
