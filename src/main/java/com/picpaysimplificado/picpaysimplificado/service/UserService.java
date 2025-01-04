@@ -39,7 +39,7 @@ public class UserService {
    public User createUser(UserForm user){
         // repository.findUserByCpf(user.cpf());
         if(repository.findUserByCpf(user.cpf()).isPresent()){
-            throw new EntityNotFoundException("Já existe Usuário esse cpf: " + user.cpf());
+            throw new DataIntegrityViolationException("Já existe Usuário esse cpf: " + user.cpf());
         }
         User userNew =  new User(user);
         this.saveUser(userNew);
