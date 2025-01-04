@@ -30,8 +30,10 @@ public class TransactionService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private NotificationService notificationService;
     
-    public void createTransaction(TransactionForm transactionForm){
+    public Transaction createTransaction(TransactionForm transactionForm){
 
         User sender = this.userService.findUserById(transactionForm.senderId());
         User receiver = this.userService.findUserById(transactionForm.receiverId());
@@ -48,13 +50,16 @@ public class TransactionService {
         transactionNew.setTimestamp(LocalDateTime.now());
 
         sender.setBalance(sender.getBalance().subtract(transactionForm.value()));
-        sender.setBalance(sender.getBalance().add(transactionForm.value()));
+        receiver.setBalance(receiver.getBalance().add(transactionForm.value()));
 
         this.repository.save(transactionNew);
         this.userService.saveUser(sender);
         this.userService.saveUser(receiver);
 
-        
+        this.notificationService.sendNotification(sender, "Transação realizado com sucesso");
+        this.notificationService.sendNotification(receiver, "Transação recebida com sucesso");
+
+        return transactionNew;
     }
 
 
